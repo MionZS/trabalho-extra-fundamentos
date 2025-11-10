@@ -1,0 +1,81 @@
+{
+  "version": "1",
+  "metadata": {
+    "marimo_version": "0.17.5"
+  },
+  "cells": [
+    {
+      "id": "Kclp",
+      "code_hash": "cecae0aeac2124ea81a79a3970db2315",
+      "outputs": [
+        {
+          "type": "data",
+          "data": {
+            "text/markdown": "<span class=\"markdown prose dark:prose-invert contents\"><h2 id=\"key-insights\">Key Insights</h2>\n<ul>\n<li><strong>Higher fundamentals</strong> (e.g., A7 = 3520 Hz) require <strong>higher filter orders</strong> or <strong>higher sampling rates</strong> to control alias</li>\n<li><strong>Butterworth</strong> provides smooth passband with \u20136N dB/octave roll-off</li>\n<li>For <strong>piano recording</strong> (A0 to C8), consider <strong>96 kHz</strong> sampling or high-order anti-aliasing</li>\n<li><strong>Trade-off</strong>: higher N \u2192 steeper transition but more phase distortion</li>\n<li><strong>SNR (quantization, 32-bit)</strong> is ~194 dB (theoretical); real ADCs achieve ~120\u2013140 dB ENOB</li>\n</ul></span>"
+          }
+        }
+      ],
+      "console": []
+    },
+    {
+      "id": "Hbol",
+      "code_hash": "ccb0db12ade149d04f33e30ff9b63ffb",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "MJUe",
+      "code_hash": "e632c02fdadcb0c28772f70043c4f0f3",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "vblA",
+      "code_hash": "fd3646929b5011d710a2811c9e03d2fc",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "bkHC",
+      "code_hash": "6e5f1b3ac4a8df563b8adf116f279552",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "lEQa",
+      "code_hash": "f6c2666f3549662a8e04b1bd7a1874bf",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "PKri",
+      "code_hash": "6daaf6d1d2573e245fc3145746f3c265",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "Xref",
+      "code_hash": "ca8a63486a38edd32fc820d53a753b60",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "SFPL",
+      "code_hash": "0e7ee00fde878af0a7be472b92cc96b0",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "BYtC",
+      "code_hash": "3010d1a395724d804b77b37a9bcf3d75",
+      "outputs": [],
+      "console": []
+    },
+    {
+      "id": "RGSE",
+      "code_hash": "2e83dac6ed4840d4c6c1e092e94a1274",
+      "outputs": [],
+      "console": []
+    }
+  ]
+}

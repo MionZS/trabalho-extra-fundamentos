@@ -1,0 +1,68 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# UV (gerenciador de pacotes Python moderno)
+.venv/
+uv.lock
+
+# Ambientes virtuais antigos (não usados com uv)
+env/
+venv/
+ENV/
+.virtualenv/
+
+# Jupyter/Marimo
+.ipynb_checkpoints/
+*.ipynb
+.marimo/
+output-dir/
+output_dir/
+slides/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Assets gerados
+assets/*.png
+assets/*.jpg
+assets/*.gif
+assets/*.mp4
+!assets/.gitkeep
+
+# Documentação (ignorar todos os .md)
+*.md
+
+# Logs
+*.log
+
+# Dados temporários
+tmp/
+temp/
+
+# Sistema operacional
+Thumbs.db
+desktop.ini

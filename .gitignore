@@ -53,8 +53,15 @@ assets/*.gif
 assets/*.mp4
 !assets/.gitkeep
 
+# notebooks intermediários
+# Ignorar tudo dentro de notebooks/, mas manter o notebook 11 e o diretório de sessão do Marimo
+notebooks/*
+!notebooks/11_exercises_shannon_snr.py
+!notebooks/__marimo__/
+
 # Documentação (ignorar todos os .md)
 *.md
+docs2/
 
 # Logs
 *.log

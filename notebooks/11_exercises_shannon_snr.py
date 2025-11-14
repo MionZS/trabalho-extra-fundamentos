@@ -1,6 +1,6 @@
 import marimo
 
-__generated_with = "0.17.5"
+__generated_with = "0.17.7"
 app = marimo.App(width="medium")
 
 
@@ -25,7 +25,7 @@ def _(mo):
     - **Amostragem e Quantização** (Exercícios 1-5)
     - **Relação SNR vs Bits** (Exercício 4)
 
-    Use os gráficos e simulações abaixo para responder às questões.
+    Use os gráficos e simulações abaixo como apoio para responder às questões.
     """)
     return
 
@@ -42,7 +42,7 @@ def _():
 
 
 @app.cell
-def _(default_note, mo, piano_notes):
+def _(mo):
     mo.md(r"""
     ## Configuração do Simulador
     """)
@@ -73,7 +73,7 @@ def _(mo):
     ## 📌 Exercício 0: Teorema de Shannon-Nyquist
 
     **Conceito**: A frequência de Nyquist é $f_N = 2f_0$. Para amostrar sem perda de informação:
-    $$f_s \geq f_N = 2f_0$$
+    $$f_s > 2f_0$$
 
     ### Questões:
 
@@ -92,11 +92,11 @@ def _(mo):
 
 
 @app.cell
-def _(figure, bits, f0, np, plt):
+def _(Figure, bits, f0, np, plt):
     # Exercício 0: Visualizar várias frequências de amostragem
     _fs_values = [f0, 1.5*f0, 2*f0, 3*f0, 4*f0]
 
-    fig_shannon = figure(figsize=(14, 6))
+    fig_shannon = Figure(figsize=(14, 6))
 
     _sqnr_theoretical = 6.02 * bits.value + 1.76
 
@@ -122,8 +122,8 @@ def _(figure, bits, f0, np, plt):
 
         # Validar Shannon
         _f_nyquist_req = 2 * f0
-        _status = "✓ OK" if _fs_test >= _f_nyquist_req else "✗ Aliasing"
-        _color_title = 'green' if _fs_test >= _f_nyquist_req else 'red'
+        _status = "✓ OK" if _fs_test > _f_nyquist_req else "✗ Aliasing"
+        _color_title = 'green' if _fs_test > _f_nyquist_req else 'red'
 
         ax.set_title(f'$f_s = {_fs_test/f0:.1f} \\cdot f_0$\n{_status}',
                     fontsize=10, color=_color_title, weight='bold')
@@ -172,7 +172,7 @@ def _(mo):
 
 
 @app.cell
-def _(figure, bits, f0, np, plt, sampling_freq):
+def _(Figure, bits, f0, np, plt, sampling_freq):
     # Exercício 0B: Reconstrução de Shannon
     _fs_recon = float(sampling_freq.value.strip()) if sampling_freq.value.strip() else 17600
     _t_recon_period = 1 / _fs_recon
@@ -200,7 +200,7 @@ def _(figure, bits, f0, np, plt, sampling_freq):
     _x_orig_recon = np.sin(2 * np.pi * f0 * _t_recon)
 
     # Plotar
-    fig_recon = figure(figsize=(14, 6))
+    fig_recon = Figure(figsize=(14, 6))
 
     # Subplot 1: Sinais sobrepostos
     ax1 = fig_recon.add_subplot(1, 2, 1)
@@ -257,7 +257,7 @@ def _(mo):
 
 
 @app.cell
-def _(figure, f0, mo, np, plt, sampling_freq):
+def _(Figure, f0, np, plt, sampling_freq):
     # Exercício 1: Amostragem
     _fs_ex1 = float(sampling_freq.value.strip()) if sampling_freq.value.strip() else 17600
     _t_ex1 = np.arange(0, 2/f0, 1/_fs_ex1)  # 2 períodos
@@ -267,7 +267,7 @@ def _(figure, f0, mo, np, plt, sampling_freq):
     _t_dense_ex1 = np.linspace(0, 2/f0, 2000)
     _x_dense_ex1 = np.sin(2 * np.pi * f0 * _t_dense_ex1)
 
-    fig_ex1 = figure(figsize=(12, 4))
+    fig_ex1 = Figure(figsize=(12, 4))
     ax_ex1 = fig_ex1.add_subplot(1, 1, 1)
     ax_ex1.plot(_t_dense_ex1 * 1e3, _x_dense_ex1, 'b-', linewidth=1, alpha=0.5, label='Contínuo')
     ax_ex1.plot(_t_ex1 * 1e3, _x_ex1, 'go', markersize=5, label=f'Amostras ($f_s$={_fs_ex1:.0f} Hz)')
@@ -290,7 +290,7 @@ def _(mo):
     ## 📌 Exercício 2: Quantização e Ruído
 
     **Conceito**: Quantização uniforme com $n$ bits introduz ruído. Calculamos:
-    - Passo: $\Delta = \frac{2A}{2^n}$
+    - Passo: $\Delta = \frac{2m_{\max}}{2^n}$
     - Potência de ruído: $P_q = \frac{\Delta^2}{12}$
     - SQNR teórico: $\text{SQNR}_q [\text{dB}] = 6.02n + 1.76$
 
@@ -313,7 +313,7 @@ def _(mo):
 
 
 @app.cell
-def _(figure, bits, f0, np, plt, sampling_freq):
+def _(Figure, bits, f0, np, plt, sampling_freq):
     # Exercício 2: Quantização e Ruído
     _fs_ex2 = float(sampling_freq.value.strip()) if sampling_freq.value.strip() else 17600
     _num_periods_ex2 = 1
@@ -326,7 +326,7 @@ def _(figure, bits, f0, np, plt, sampling_freq):
     _x_q_ex2 = np.round(_x_ex2 / _delta_ex2) * _delta_ex2
     _noise_ex2 = _x_ex2 - _x_q_ex2
 
-    fig_ex2 = figure(figsize=(14, 5))
+    fig_ex2 = Figure(figsize=(14, 5))
 
     # Subplot 1: Sinal quantizado
     ax1_ex2 = fig_ex2.add_subplot(1, 2, 1)
@@ -378,9 +378,9 @@ def _(mo):
 
 
 @app.cell
-def _(figure, bits, f0, np, plt):
+def _(Figure, bits, f0, np, plt):
     # Exercício 4: SNR vs Bits
-    fig_snr_ex4 = figure(figsize=(14, 5))
+    fig_snr_ex4 = Figure(figsize=(14, 5))
 
     # Gráfico 1: SQNR teórico
     _ax1_ex4 = fig_snr_ex4.add_subplot(1, 2, 1)
@@ -462,9 +462,9 @@ def _(mo):
 
     | Tom | $f_0$ (Hz) | $f_s$ (Hz) | Erro Máx. (log) | Observação |
     |-----|-----------|-----------|-----------------|------------|
-    | A4  | 440       | 17600     |                 | ✅ Nyquist OK |
-    | A4  | 440       | 8800      |                 | ⚠️ Limite |
-    | A4  | 440       | 1000      |                 | ❌ Violação |
+    | A4  | 440       | 17600     |                 |  |
+    | A4  | 440       | 8800      |                 |  |
+    | A4  | 440       | 1000      |                 |  |
 
     ### Tabela 2: Exercício 1 --- Amostragem (Preencha)
 
@@ -508,7 +508,7 @@ def _(mo):
     ### Teorema de Shannon-Nyquist
 
     **Critério (Nyquist)**:
-    $$f_s \geq 2f_0$$
+    $$f_s > 2f_0$$
 
     **Reconstrução (Shannon)**:
     $$x(t) = \sum_{n=-\infty}^{\infty} x[n] \cdot \text{sinc}\left(\frac{t - nT_s}{T_s}\right), \quad \text{sinc}(u) = \frac{\sin(\pi u)}{\pi u}$$
@@ -516,7 +516,7 @@ def _(mo):
     ### Quantização Uniforme
 
     **Passo de quantização**:
-    $$\Delta = \frac{2A}{2^n - 1} \approx \frac{2A}{2^n}$$
+    $$\Delta = \frac{2m_{\max}}{L} = \frac{2m_{\max}}{2^n}$$
 
     **Potência de ruído**:
     $$P_q = \frac{\Delta^2}{12}$$
@@ -525,6 +525,112 @@ def _(mo):
     $$\text{SQNR}_q [\text{dB}] = 6.02\,n + 1.76$$
 
     onde $n$ é o número de bits.
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    mo.md(r"""
+    ---
+
+    ## 📝 Tabelas Interativas (Preencha e Copie)
+
+    Preencha as tabelas abaixo e clique em "📋 Copiar em MD" para copiar para a clipboard!
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    # Tabela 0: Shannon
+    mo.md(r"""
+    ### Tabela 0: Exercício 0 --- Teorema de Shannon
+    """)
+    return
+
+
+@app.cell
+def _(mo):
+    # Inputs para Tabela 0
+    t0_a0_fn = mo.ui.text(label="A0 - f_N (Hz):", value="55")
+    t0_a3_fn = mo.ui.text(label="A3 - f_N (Hz):", value="440")
+    t0_a4_fn = mo.ui.text(label="A4 - f_N (Hz):", value="880")
+    t0_a6_fn = mo.ui.text(label="A6 - f_N (Hz):", value="3520")
+    t0_a7_fn = mo.ui.text(label="A7 - f_N (Hz):", value="7040")
+
+    t0_a0_ok = mo.ui.text(label="A0 - f_s > f_N?:", value="Sim")
+    t0_a3_ok = mo.ui.text(label="A3 - f_s > f_N?:", value="Sim")
+    t0_a4_ok = mo.ui.text(label="A4 - f_s > f_N?:", value="Sim")
+    t0_a6_ok = mo.ui.text(label="A6 - f_s > f_N?:", value="Sim")
+    t0_a7_ok = mo.ui.text(label="A7 - f_s > f_N?:", value="Não")
+
+    return (
+        t0_a0_fn,
+        t0_a0_ok,
+        t0_a3_fn,
+        t0_a3_ok,
+        t0_a4_fn,
+        t0_a4_ok,
+        t0_a6_fn,
+        t0_a6_ok,
+        t0_a7_fn,
+        t0_a7_ok,
+    )
+
+
+@app.cell
+def _(
+    mo,
+    t0_a0_fn,
+    t0_a0_ok,
+    t0_a3_fn,
+    t0_a3_ok,
+    t0_a4_fn,
+    t0_a4_ok,
+    t0_a6_fn,
+    t0_a6_ok,
+    t0_a7_fn,
+    t0_a7_ok,
+):
+    import pyperclip
+
+    def generate_tabela0_md():
+        md = """| Tom | f_0 (Hz) | f_N = 2f_0 (Hz) | f_s (Hz) | f_s > f_N? | Visualização |
+    |-----|----------|-----------------|----------|-----------|--------------|
+    | A0  | 27,5     | {a0_fn} | 17600 | {a0_ok} |     ✓      |
+    | A3  | 220      | {a3_fn} | 17600 | {a3_ok} |     ✓      |
+    | A4  | 440      | {a4_fn} | 17600 | {a4_ok} |     ✓      |
+    | A6  | 1760     | {a6_fn} | 17600 | {a6_ok} |     ✓      |
+    | A7  | 3520     | {a7_fn} | 17600 | {a7_ok} |     ✗      |""".format(
+            a0_fn=t0_a0_fn.value or "___",
+            a3_fn=t0_a3_fn.value or "___",
+            a4_fn=t0_a4_fn.value or "___",
+            a6_fn=t0_a6_fn.value or "___",
+            a7_fn=t0_a7_fn.value or "___",
+            a0_ok=t0_a0_ok.value or "___",
+            a3_ok=t0_a3_ok.value or "___",
+            a4_ok=t0_a4_ok.value or "___",
+            a6_ok=t0_a6_ok.value or "___",
+            a7_ok=t0_a7_ok.value or "___"
+        )
+        return md
+
+    # Copy to clipboard
+    md_text = generate_tabela0_md()
+    try:
+        pyperclip.copy(md_text)
+        status = "✅ Tabela 0 copiada para clipboard!"
+    except Exception as e:
+        status = f"❌ Erro ao copiar: {str(e)}"
+
+    mo.md(f"""
+    {status}
+
+    **Tabela Preview:**
+    ```
+    {md_text}
+    ```
     """)
     return
 
@@ -555,7 +661,7 @@ def _(mo):
 def _(piano_notes, tone):
     # Calcula f0 do tom selecionado
     f0 = piano_notes[tone.value]
-    return f0,
+    return (f0,)
 
 
 if __name__ == "__main__":

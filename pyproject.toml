@@ -12,6 +12,7 @@ dependencies = [
     "polars>=1.0.0",
     "scipy>=1.14.0",
     "pyzmq>=27.1.0",
+    "pyperclip>=1.8.0",
 ]
 
 [dependency-groups]

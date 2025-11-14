@@ -17,14 +17,14 @@ def _():
 def _(mo):
     mo.md(r"""
     # 📋 Exercícios Interativos: Shannon, Quantização e SNR
-    
+
     ## Objetivo
-    
+
     Explorar interativamente os conceitos de:
     - **Teorema de Shannon-Nyquist** (Exercício 0 e 0B)
     - **Amostragem e Quantização** (Exercícios 1-5)
     - **Relação SNR vs Bits** (Exercício 4)
-    
+
     Use os gráficos e simulações abaixo para responder às questões.
     """)
     return
@@ -54,12 +54,12 @@ def _(default_note, mo, piano_notes):
     tone = mo.ui.dropdown(options=list(piano_notes.keys()), value=default_note, label="Selecione o Tom:")
     bits = mo.ui.slider(4, 16, step=1, value=8, label="Bits de resolução:")
     sampling_freq = mo.ui.text(value="17600", label="Frequência de Amostragem (Hz):")
-    
+
     mo.md(f"""
     {tone}
-    
+
     {bits}
-    
+
     {sampling_freq}
     """)
     return bits, sampling_freq, tone
@@ -69,23 +69,23 @@ def _(default_note, mo, piano_notes):
 def _(mo):
     mo.md(r"""
     ---
-    
+
     ## 📌 Exercício 0: Teorema de Shannon-Nyquist
-    
+
     **Conceito**: A frequência de Nyquist é $f_N = 2f_0$. Para amostrar sem perda de informação:
     $$f_s \geq f_N = 2f_0$$
-    
+
     ### Questões:
-    
+
     **0.1** Calcule a frequência de Nyquist para os seguintes tons:
     - A0 (27,5 Hz) → $f_N = ?$
     - A3 (220 Hz) → $f_N = ?$
     - A4 (440 Hz) → $f_N = ?$
     - A6 (1760 Hz) → $f_N = ?$
     - A7 (3520 Hz) → $f_N = ?$
-    
+
     **0.2** Com $f_s = 17600$ Hz, qual é o tom de **maior frequência** que pode ser amostrado sem aliasing?
-    
+
     **0.3** Observe o gráfico abaixo (6 subplots). Identifique: em qual caso a condição de Nyquist deixa de ser satisfeita?
     """)
     return
@@ -144,26 +144,26 @@ def _(figure, bits, f0, np, plt):
 def _(mo):
     mo.md(r"""
     ---
-    
+
     ## 📌 Exercício 0B: Reconstrução de Shannon (Interpolação Sinc)
-    
+
     **Conceito**: Se Nyquist é satisfeito, podemos **reconstruir perfeitamente** o sinal:
     $$x(t) = \sum_{n=-\infty}^{\infty} x[n] \cdot \text{sinc}\left(\frac{t - nT_s}{T_s}\right)$$
-    
+
     onde $\text{sinc}(u) = \frac{\sin(\pi u)}{\pi u}$.
-    
+
     ### Questões:
-    
+
     **0B.1** Observe o gráfico esquerdo abaixo:
     - Linha azul tracejada = Sinal original (referência)
     - Linha vermelha sólida = Sinal reconstruído via sinc
     - Pontos verdes = Amostras quantizadas
-    
+
     **Pergunta**: Com seu tom e bits selecionados, o sinal reconstruído (vermelho) está próximo do original (azul)?
-    
+
     **0B.2** Observe o gráfico direito (erro em escala logarítmica):
     - O erro de reconstrução é maior ou menor que $10^{-5}$?
-    
+
     **0B.3** Agora mude a frequência de amostragem para 1000 Hz (campo acima) e execute novamente:
     - O sinal reconstruído ainda sobrepõe o original?
     - O que mudou no gráfico de erro?
@@ -235,20 +235,20 @@ def _(figure, bits, f0, np, plt, sampling_freq):
 def _(mo):
     mo.md(r"""
     ---
-    
+
     ## 📌 Exercício 1: Amostragem de Tom Puro
-    
+
     **Conceito**: Com frequência de amostragem fixa, observamos diferentes números de amostras por período.
-    
+
     ### Questões:
-    
+
     **1.1** Selecione A4 (440 Hz). Para cada frequência de amostragem abaixo, calcule:
     $$\text{Amostras/Período} = \frac{f_s}{f_0}$$
-    
+
     - $f_s = 17600$ Hz → Amostras/período = ?
     - $f_s = 8800$ Hz → Amostras/período = ?
     - $f_s = 4400$ Hz → Amostras/período = ?
-    
+
     **1.2** Observe o gráfico abaixo para $f_s = 17600$ Hz:
     - O sinal amostrado parece suave ou discreto?
     - Quantos pontos verdes (amostras) você conta em um período?
@@ -286,25 +286,25 @@ def _(figure, f0, mo, np, plt, sampling_freq):
 def _(mo):
     mo.md(r"""
     ---
-    
+
     ## 📌 Exercício 2: Quantização e Ruído
-    
+
     **Conceito**: Quantização uniforme com $n$ bits introduz ruído. Calculamos:
     - Passo: $\Delta = \frac{2A}{2^n}$
     - Potência de ruído: $P_q = \frac{\Delta^2}{12}$
     - SQNR teórico: $\text{SQNR}_q [\text{dB}] = 6.02n + 1.76$
-    
+
     ### Questões:
-    
+
     **2.1** Calcule para A = 1 V:
-    
+
     | n (bits) | $\Delta$ (V) | $P_q$ (V²) | SQNR (dB) |
     |----------|-------------|-----------|----------|
     | 4        | ?           | ?         | ?        |
     | 8        | ?           | ?         | ?        |
     | 12       | ?           | ?         | ?        |
     | 16       | ?           | ?         | ?        |
-    
+
     **2.2** Observe o gráfico abaixo:
     - Com seus bits selecionados, qual é a amplitude máxima do ruído (linha verde)?
     - O ruído é maior ou menor com mais bits?
@@ -358,20 +358,20 @@ def _(figure, bits, f0, np, plt, sampling_freq):
 def _(mo):
     mo.md(r"""
     ---
-    
+
     ## 📌 Exercício 4: Relação SNR × Bits
-    
+
     **Conceito**: SQNR teórico é $\text{SQNR}_q = 6.02n + 1.76$ dB. Cada bit adiciona ~6 dB.
-    
+
     ### Questões:
-    
+
     **4.1** Plote SQNR teórico para $n = 4$ a $16$ bits. A relação é linear?
-    
+
     **4.2** Observe o gráfico abaixo à direita (erro de reconstrução vs bits):
     - Com 4 bits, qual é a ordem de magnitude do erro RMS?
     - Com 16 bits, qual é o erro RMS?
     - O erro diminui linearmente ou exponencialmente?
-    
+
     **4.3** Estime a inclinação (dB/bit) do gráfico de erro. É próxima a 6 dB/bit?
     """)
     return
@@ -445,11 +445,11 @@ def _(figure, bits, f0, np, plt):
 def _(mo):
     mo.md(r"""
     ---
-    
+
     ## 📌 Tabelas para Preenchimento
-    
+
     ### Tabela 0: Exercício 0 --- Teorema de Shannon (Preencha)
-    
+
     | Tom | $f_0$ (Hz) | $f_N = 2f_0$ (Hz) | $f_s$ (Hz) | $f_s \geq f_N$? | Visualização |
     |-----|-----------|----------------|-----------|-------------|--------------|
     | A0  | 27,5      |                | 17600     |             |              |
@@ -457,34 +457,34 @@ def _(mo):
     | A4  | 440       |                | 17600     |             |              |
     | A6  | 1760      |                | 17600     |             |              |
     | A7  | 3520      |                | 17600     |             |              |
-    
+
     ### Tabela 0B: Exercício 0B --- Reconstrução de Shannon (Preencha)
-    
+
     | Tom | $f_0$ (Hz) | $f_s$ (Hz) | Erro Máx. (log) | Observação |
     |-----|-----------|-----------|-----------------|------------|
     | A4  | 440       | 17600     |                 | ✅ Nyquist OK |
     | A4  | 440       | 8800      |                 | ⚠️ Limite |
     | A4  | 440       | 1000      |                 | ❌ Violação |
-    
+
     ### Tabela 2: Exercício 1 --- Amostragem (Preencha)
-    
+
     | Tom | $f_s$ (Hz) | Amostras/Período | $f_0$ Teórica (Hz) | $f_0$ Observada (Hz) |
     |-----|-----------|------------------|-------------------|----------------------|
     | A4  | 17600     |                  | 440                |                      |
     | A4  | 8800      |                  | 440                |                      |
     | A4  | 4400      |                  | 440                |                      |
-    
+
     ### Tabela 3: Exercício 2 --- Quantização (Preencha)
-    
+
     | n (bits) | $\Delta$ (V) | $P_q$ (V²) | SQNR Teórico (dB) |
     |----------|-------------|-----------|-------------------|
     | 4        |             |           |                   |
     | 8        |             |           |                   |
     | 12       |             |           |                   |
     | 16       |             |           |                   |
-    
+
     ### Tabela 5: Exercício 4 --- SNR vs Bits (Preencha)
-    
+
     | n (bits) | SQNR Teórico (dB) | Erro RMS (Ex. 4b) | Observação |
     |----------|-------------------|-------------------|------------|
     | 4        |                   |                   |            |
@@ -502,28 +502,28 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     ---
-    
+
     ## 📋 Resumo de Fórmulas
-    
+
     ### Teorema de Shannon-Nyquist
-    
+
     **Critério (Nyquist)**:
     $$f_s \geq 2f_0$$
-    
+
     **Reconstrução (Shannon)**:
     $$x(t) = \sum_{n=-\infty}^{\infty} x[n] \cdot \text{sinc}\left(\frac{t - nT_s}{T_s}\right), \quad \text{sinc}(u) = \frac{\sin(\pi u)}{\pi u}$$
-    
+
     ### Quantização Uniforme
-    
+
     **Passo de quantização**:
     $$\Delta = \frac{2A}{2^n - 1} \approx \frac{2A}{2^n}$$
-    
+
     **Potência de ruído**:
     $$P_q = \frac{\Delta^2}{12}$$
-    
+
     **SQNR teórico**:
     $$\text{SQNR}_q [\text{dB}] = 6.02\,n + 1.76$$
-    
+
     onde $n$ é o número de bits.
     """)
     return
@@ -533,17 +533,17 @@ def _(mo):
 def _(mo):
     mo.md(r"""
     ---
-    
+
     ## 🎓 Instruções
-    
+
     1. **Configure o simulador** acima (tom, bits, frequência de amostragem)
     2. **Observe os gráficos** para cada exercício
     3. **Preencha as tabelas** com seus resultados
     4. **Responda as questões** em texto
     5. **Compare teórico × simulação** e discuta desvios
-    
+
     ### Entrega
-    
+
     - PDF com tabelas preenchidas
     - Capturas dos gráficos do Marimo
     - Breves análises (1-2 linhas por exercício)

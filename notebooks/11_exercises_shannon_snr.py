@@ -546,7 +546,7 @@ def _(mo):
 
     - PDF com tabelas preenchidas
     - Capturas dos gráficos do Marimo
-    - Breves análises (1-2 linhas por exercício)
+    - **Explicações dos conceitos e análises dos resultados** (teórico vs simulação)
     """)
     return
 

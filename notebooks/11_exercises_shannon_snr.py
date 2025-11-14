@@ -7,8 +7,8 @@ app = marimo.App(width="medium")
 @app.cell
 def _():
     import marimo as mo
-    import numpy as np
     import matplotlib.pyplot as plt
+    import numpy as np
     from matplotlib.figure import Figure
     return Figure, mo, np, plt
 
@@ -92,47 +92,47 @@ def _(mo):
 
 
 @app.cell
-def _(Figure, bits, f0, np, plt):
+def _(figure, bits, f0, np, plt):
     # Exercício 0: Visualizar várias frequências de amostragem
     _fs_values = [f0, 1.5*f0, 2*f0, 3*f0, 4*f0]
-    
-    fig_shannon = Figure(figsize=(14, 6))
-    
+
+    fig_shannon = figure(figsize=(14, 6))
+
     _sqnr_theoretical = 6.02 * bits.value + 1.76
-    
+
     for idx, _fs_test in enumerate(_fs_values, 1):
         ax = fig_shannon.add_subplot(2, 3, idx)
-        
+
         # Gerar sinal denso
         _t_dense = np.linspace(0, 3/f0, 1000)
         _x_dense = np.sin(2 * np.pi * f0 * _t_dense)
-        
+
         # Amostrar e quantizar
         _t_sample = np.arange(0, 3/f0, 1/_fs_test)
         _x_sample = np.sin(2 * np.pi * f0 * _t_sample)
-        
+
         # Quantização
         _levels = 2 ** bits.value
         _delta = 2.0 / (_levels - 1)
         _x_quantized = np.round(_x_sample / _delta) * _delta
-        
+
         # Plot
         ax.plot(_t_dense * 1e3, _x_dense, 'b:', linewidth=1, alpha=0.4, label='Original')
-        ax.plot(_t_sample * 1e3, _x_quantized, 'ro', markersize=5, label=f'Quantizado')
-        
+        ax.plot(_t_sample * 1e3, _x_quantized, 'ro', markersize=5, label='Quantizado')
+
         # Validar Shannon
         _f_nyquist_req = 2 * f0
         _status = "✓ OK" if _fs_test >= _f_nyquist_req else "✗ Aliasing"
         _color_title = 'green' if _fs_test >= _f_nyquist_req else 'red'
-        
-        ax.set_title(f'$f_s = {_fs_test/f0:.1f} \\cdot f_0$\n{_status}', 
+
+        ax.set_title(f'$f_s = {_fs_test/f0:.1f} \\cdot f_0$\n{_status}',
                     fontsize=10, color=_color_title, weight='bold')
         ax.set_xlabel('Tempo (ms)', fontsize=9)
         ax.set_ylabel('Amplitude', fontsize=9)
         ax.grid(True, alpha=0.3)
         ax.legend(fontsize=8, loc='upper right')
-    
-    fig_shannon.suptitle(f'Ex. 0: Comparação de Frequências (tom={f0:.1f} Hz, {bits.value} bits)', 
+
+    fig_shannon.suptitle(f'Ex. 0: Comparação de Frequências (tom={f0:.1f} Hz, {bits.value} bits)',
                         fontsize=12, weight='bold')
     fig_shannon.tight_layout()
     plt.close(fig_shannon)
@@ -172,36 +172,36 @@ def _(mo):
 
 
 @app.cell
-def _(Figure, bits, f0, np, plt, sampling_freq):
+def _(figure, bits, f0, np, plt, sampling_freq):
     # Exercício 0B: Reconstrução de Shannon
     _fs_recon = float(sampling_freq.value.strip()) if sampling_freq.value.strip() else 17600
-    _T_recon = 1 / _fs_recon
-    
+    _t_recon_period = 1 / _fs_recon
+
     # Gerar tempo contínuo para reconstrução
     _t_recon = np.linspace(0, 3 / f0, 5000)
-    
+
     # Amostras
     _t_samp_recon = np.arange(0, 3 / f0, 1 / _fs_recon)
     _x_samp_recon = np.sin(2 * np.pi * f0 * _t_samp_recon)
-    
+
     # Quantizar
     _levels = 2 ** bits.value
     _delta = 2.0 / (_levels - 1)
     _x_q_recon = np.round(_x_samp_recon / _delta) * _delta
-    
+
     # Reconstruir via Sinc
     _x_recon = np.zeros_like(_t_recon)
     for _n, _x_n in enumerate(_x_q_recon):
-        _t_shifted = (_t_recon - _n * _T_recon) / _T_recon
+        _t_shifted = (_t_recon - _n * _t_recon_period) / _t_recon_period
         _sinc_vals = np.sinc(_t_shifted)
         _x_recon += _x_n * _sinc_vals
-    
+
     # Sinal original
     _x_orig_recon = np.sin(2 * np.pi * f0 * _t_recon)
-    
+
     # Plotar
-    fig_recon = Figure(figsize=(14, 6))
-    
+    fig_recon = figure(figsize=(14, 6))
+
     # Subplot 1: Sinais sobrepostos
     ax1 = fig_recon.add_subplot(1, 2, 1)
     ax1.plot(_t_recon * 1e3, _x_orig_recon, 'b:', linewidth=1, label='Original (ref)', alpha=0.6)
@@ -213,18 +213,18 @@ def _(Figure, bits, f0, np, plt, sampling_freq):
     ax1.grid(True, alpha=0.3)
     ax1.legend(loc='upper right', fontsize=10)
     ax1.set_xlim([0, 3 / f0 * 1e3])
-    
+
     # Subplot 2: Erro
     _error_recon = np.abs(_x_orig_recon - _x_recon)
     ax2 = fig_recon.add_subplot(1, 2, 2)
     ax2.semilogy(_t_recon * 1e3, _error_recon + 1e-15, 'r-', linewidth=2, label='Erro absoluto')
     ax2.set_xlabel('Tempo (ms)', fontsize=11)
     ax2.set_ylabel('Erro (log)', fontsize=11)
-    ax2.set_title(f'Erro de Reconstrução', fontsize=12, weight='bold')
+    ax2.set_title('Erro de Reconstrução', fontsize=12, weight='bold')
     ax2.grid(True, alpha=0.3, which='both')
     ax2.legend(loc='upper right', fontsize=10)
     ax2.set_xlim([0, 3 / f0 * 1e3])
-    
+
     fig_recon.tight_layout()
     plt.close(fig_recon)
     fig_recon
@@ -257,17 +257,17 @@ def _(mo):
 
 
 @app.cell
-def _(Figure, f0, mo, np, plt, sampling_freq):
+def _(figure, f0, mo, np, plt, sampling_freq):
     # Exercício 1: Amostragem
     _fs_ex1 = float(sampling_freq.value.strip()) if sampling_freq.value.strip() else 17600
     _t_ex1 = np.arange(0, 2/f0, 1/_fs_ex1)  # 2 períodos
     _x_ex1 = np.sin(2 * np.pi * f0 * _t_ex1)
-    
+
     # Sinal denso para comparação
     _t_dense_ex1 = np.linspace(0, 2/f0, 2000)
     _x_dense_ex1 = np.sin(2 * np.pi * f0 * _t_dense_ex1)
-    
-    fig_ex1 = Figure(figsize=(12, 4))
+
+    fig_ex1 = figure(figsize=(12, 4))
     ax_ex1 = fig_ex1.add_subplot(1, 1, 1)
     ax_ex1.plot(_t_dense_ex1 * 1e3, _x_dense_ex1, 'b-', linewidth=1, alpha=0.5, label='Contínuo')
     ax_ex1.plot(_t_ex1 * 1e3, _x_ex1, 'go', markersize=5, label=f'Amostras ($f_s$={_fs_ex1:.0f} Hz)')
@@ -313,41 +313,41 @@ def _(mo):
 
 
 @app.cell
-def _(Figure, bits, f0, np, plt, sampling_freq):
+def _(figure, bits, f0, np, plt, sampling_freq):
     # Exercício 2: Quantização e Ruído
     _fs_ex2 = float(sampling_freq.value.strip()) if sampling_freq.value.strip() else 17600
     _num_periods_ex2 = 1
     _t_ex2 = np.arange(0, f0**-1 * _num_periods_ex2, 1/_fs_ex2)
     _x_ex2 = np.sin(2 * np.pi * f0 * _t_ex2)
-    
+
     # Quantização
     _levels_ex2 = 2 ** bits.value
     _delta_ex2 = 2.0 / (_levels_ex2 - 1)
     _x_q_ex2 = np.round(_x_ex2 / _delta_ex2) * _delta_ex2
     _noise_ex2 = _x_ex2 - _x_q_ex2
-    
-    fig_ex2 = Figure(figsize=(14, 5))
-    
+
+    fig_ex2 = figure(figsize=(14, 5))
+
     # Subplot 1: Sinal quantizado
     ax1_ex2 = fig_ex2.add_subplot(1, 2, 1)
     ax1_ex2.plot(_t_ex2 * 1e3, _x_ex2, 'b-', linewidth=1, alpha=0.5, label='Original')
     ax1_ex2.plot(_t_ex2 * 1e3, _x_q_ex2, 'r.-', linewidth=1, markersize=3, label=f'Quantizado ({bits.value}b)')
     ax1_ex2.set_xlabel('Tempo (ms)', fontsize=11)
     ax1_ex2.set_ylabel('Amplitude', fontsize=11)
-    ax1_ex2.set_title(f'Ex. 2a: Sinal Quantizado', fontsize=12, weight='bold')
+    ax1_ex2.set_title('Ex. 2a: Sinal Quantizado', fontsize=12, weight='bold')
     ax1_ex2.grid(True, alpha=0.3)
     ax1_ex2.legend(fontsize=10)
-    
+
     # Subplot 2: Ruído
     ax2_ex2 = fig_ex2.add_subplot(1, 2, 2)
     ax2_ex2.plot(_t_ex2 * 1e3, _noise_ex2, 'g.-', linewidth=1, markersize=3, label=f'Ruído ({bits.value}b)')
     ax2_ex2.axhline(_delta_ex2/2, color='r', linestyle='--', linewidth=1, alpha=0.5, label=fr'$\Delta/2$ = {_delta_ex2/2:.4f}')
     ax2_ex2.set_xlabel('Tempo (ms)', fontsize=11)
     ax2_ex2.set_ylabel('Ruído (V)', fontsize=11)
-    ax2_ex2.set_title(f'Ex. 2b: Ruído de Quantização', fontsize=12, weight='bold')
+    ax2_ex2.set_title('Ex. 2b: Ruído de Quantização', fontsize=12, weight='bold')
     ax2_ex2.grid(True, alpha=0.3)
     ax2_ex2.legend(fontsize=10)
-    
+
     fig_ex2.tight_layout()
     plt.close(fig_ex2)
     fig_ex2
@@ -378,10 +378,10 @@ def _(mo):
 
 
 @app.cell
-def _(Figure, bits, f0, np, plt):
+def _(figure, bits, f0, np, plt):
     # Exercício 4: SNR vs Bits
-    fig_snr_ex4 = Figure(figsize=(14, 5))
-    
+    fig_snr_ex4 = figure(figsize=(14, 5))
+
     # Gráfico 1: SQNR teórico
     _ax1_ex4 = fig_snr_ex4.add_subplot(1, 2, 1)
     _bits_range_ex4 = np.arange(4, 17)
@@ -395,37 +395,37 @@ def _(Figure, bits, f0, np, plt):
     _ax1_ex4.grid(True, alpha=0.3)
     _ax1_ex4.legend(fontsize=10)
     _ax1_ex4.set_xlim([4, 16])
-    
+
     # Gráfico 2: Erro de reconstrução vs bits
     _ax2_ex4 = fig_snr_ex4.add_subplot(1, 2, 2)
-    
+
     _fs_recon_ex4 = 17600
-    _T_recon_ex4 = 1 / _fs_recon_ex4
+    _t_recon_period_ex4 = 1 / _fs_recon_ex4
     _t_recon_ex4 = np.linspace(0, 3/f0, 1000)
     _x_orig_ex4 = np.sin(2 * np.pi * f0 * _t_recon_ex4)
-    
+
     _t_samp_ex4 = np.arange(0, 3/f0, 1/_fs_recon_ex4)
     _x_samp_ex4 = np.sin(2 * np.pi * f0 * _t_samp_ex4)
-    
+
     _error_by_bits_ex4 = []
     _bits_test_ex4 = np.arange(4, 17)
-    
+
     for _b in _bits_test_ex4:
         _levels = 2 ** _b
         _delta = 2.0 / (_levels - 1)
         _x_q = np.round(_x_samp_ex4 / _delta) * _delta
-        
+
         # Reconstruir
         _x_recon = np.zeros_like(_t_recon_ex4)
         for _n, _x_n in enumerate(_x_q):
-            _t_shifted = (_t_recon_ex4 - _n * _T_recon_ex4) / _T_recon_ex4
+            _t_shifted = (_t_recon_ex4 - _n * _t_recon_period_ex4) / _t_recon_period_ex4
             _sinc_vals = np.sinc(_t_shifted)
             _x_recon += _x_n * _sinc_vals
-        
+
         # Erro RMS
         _err_rms = np.sqrt(np.mean((_x_orig_ex4 - _x_recon)**2))
         _error_by_bits_ex4.append(_err_rms)
-    
+
     _ax2_ex4.semilogy(_bits_test_ex4, _error_by_bits_ex4, 'r-o', linewidth=2.5, markersize=6, label='Erro RMS (Shannon)')
     _ax2_ex4.plot(bits.value, _error_by_bits_ex4[bits.value - 4], 'go', markersize=12, label=f'Atual ({bits.value}b)')
     _ax2_ex4.set_xlabel('Número de Bits', fontsize=11)
@@ -434,7 +434,7 @@ def _(Figure, bits, f0, np, plt):
     _ax2_ex4.grid(True, alpha=0.3, which='both')
     _ax2_ex4.legend(fontsize=10)
     _ax2_ex4.set_xlim([4, 16])
-    
+
     fig_snr_ex4.tight_layout()
     plt.close(fig_snr_ex4)
     fig_snr_ex4
